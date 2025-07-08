@@ -27,7 +27,7 @@ export function useSeamQueryWithoutWorkspace<
   endpointPath: T,
   parameters: UseSeamQueryWithoutWorkspaceParameters<T> = {},
   options: Parameters<SeamHttpEndpointsWithoutWorkspace[T]>[1] &
-    QueryOptions<QueryData<T>, QueryError> = {}
+    QueryOptions<QueryData<T>, QueryError> = {},
 ): UseSeamQueryWithoutWorkspaceResult<T> & { queryKey: QueryKey } {
   const { endpointClient: client, queryKeyPrefixes } = useSeamClient()
   const queryKey = [

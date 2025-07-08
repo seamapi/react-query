@@ -32,7 +32,7 @@ export function useSeamInfiniteQuery<
   endpointPath: T,
   parameters: UseSeamInfiniteQueryParameters<T> = {},
   options: Parameters<SeamHttpEndpoints[T]>[1] &
-    QueryOptions<QueryData<T>, QueryError<T>> = {}
+    QueryOptions<QueryData<T>, QueryError<T>> = {},
 ): UseSeamInfiniteQueryResult<T> & { queryKey: QueryKey } {
   const { endpointClient: client, queryKeyPrefixes } = useSeamClient()
 
@@ -71,7 +71,7 @@ export function useSeamInfiniteQuery<
       }
       // Type assertion is needed for pageParam since the Seam API expects a branded PageCursor type.
       const [data, { nextPageCursor }] = await pages.nextPage(
-        pageParam as SeamPageCursor
+        pageParam as SeamPageCursor,
       )
       return {
         data: data as Awaited<ReturnType<SeamHttpEndpoints[T]>>,

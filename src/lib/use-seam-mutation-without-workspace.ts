@@ -33,7 +33,7 @@ export function useSeamMutationWithoutWorkspace<
       MutationData<T>,
       MutationError,
       UseSeamMutationWithoutWorkspaceVariables<T>
-    > = {}
+    > = {},
 ): UseSeamMutationWithoutWorkspaceResult<T> {
   const { endpointClient: client } = useSeamClient()
   return useMutation({

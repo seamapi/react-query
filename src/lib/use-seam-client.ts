@@ -31,7 +31,7 @@ export function useSeamClient(): {
     ...context
   } = useSeamQueryContext()
   const userIdentifierKey = useUserIdentifierKeyOrFingerprint(
-    clientSessionToken != null ? '' : context.userIdentifierKey
+    clientSessionToken != null ? '' : context.userIdentifierKey,
   )
 
   const { isPending, isError, error, data } = useQuery<{
@@ -63,7 +63,7 @@ export function useSeamClient(): {
       if (clientSessionToken != null) {
         const seam = SeamHttp.fromClientSessionToken(
           clientSessionToken,
-          clientOptions
+          clientOptions,
         )
 
         return {
@@ -78,7 +78,7 @@ export function useSeamClient(): {
         const seam = await SeamHttp.fromPublishableKey(
           publishableKey,
           userIdentifierKey,
-          clientOptions
+          clientOptions,
         )
 
         return {
@@ -95,7 +95,7 @@ export function useSeamClient(): {
 
         const endpointClientWithoutWorkspace =
           SeamHttpEndpointsWithoutWorkspace.fromClient(
-            clientWithoutWorkspace.client
+            clientWithoutWorkspace.client,
           )
 
         if (workspaceId == null) {
@@ -110,7 +110,7 @@ export function useSeamClient(): {
         const seam = SeamHttp.fromConsoleSessionToken(
           consoleSessionToken,
           workspaceId,
-          clientOptions
+          clientOptions,
         )
 
         return {
@@ -122,7 +122,7 @@ export function useSeamClient(): {
       }
 
       throw new Error(
-        'Missing either a client, publishableKey, clientSessionToken, or consoleSessionToken.'
+        'Missing either a client, publishableKey, clientSessionToken, or consoleSessionToken.',
       )
     },
   })
@@ -155,7 +155,7 @@ export class NullSeamClientError extends Error {
         'Either a hook using useSeamClient was called outside of a SeamProvider or SeamQueryProvider,',
         'or there was an error when creating the Seam client in useSeamClient,',
         'or useSeamClient is still loading the client.',
-      ].join(' ')
+      ].join(' '),
     )
     this.name = this.constructor.name
     Error.captureStackTrace(this, this.constructor)
@@ -163,7 +163,7 @@ export class NullSeamClientError extends Error {
 }
 
 function useUserIdentifierKeyOrFingerprint(
-  userIdentifierKey: string | undefined
+  userIdentifierKey: string | undefined,
 ): string {
   useEffect(() => {
     if (userIdentifierKey != null) return

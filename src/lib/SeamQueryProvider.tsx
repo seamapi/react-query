@@ -145,7 +145,7 @@ function Session({
 }
 
 const createDefaultSeamQueryContextValue = (): SeamQueryContext => {
-    return { client: null, endpointClient: null }
+  return { client: null, endpointClient: null }
 }
 
 const createSeamQueryContextValue = (

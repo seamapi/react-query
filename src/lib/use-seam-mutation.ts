@@ -32,7 +32,7 @@ export function useSeamMutation<T extends SeamHttpEndpointMutationPaths>(
       MutationData<T>,
       MutationError<T>,
       UseSeamMutationVariables<T>
-    > = {}
+    > = {},
 ): UseSeamMutationResult<T> {
   const { endpointClient: client } = useSeamClient()
   return useMutation({

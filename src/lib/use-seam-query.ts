@@ -26,7 +26,7 @@ export function useSeamQuery<T extends SeamHttpEndpointQueryPaths>(
   endpointPath: T,
   parameters: UseSeamQueryParameters<T> = {},
   options: Parameters<SeamHttpEndpoints[T]>[1] &
-    QueryOptions<QueryData<T>, SeamHttpApiError> = {}
+    QueryOptions<QueryData<T>, SeamHttpApiError> = {},
 ): UseSeamQueryResult<T> & { queryKey: QueryKey } {
   const { endpointClient: client, queryKeyPrefixes } = useSeamClient()
   const queryKey = [
