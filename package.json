@@ -96,7 +96,7 @@
     "@seamapi/http": "^1.40.1",
     "@seamapi/types": "^1.395.3",
     "@testing-library/react": "^14.0.0",
-    "@types/node": "^20.11.27",
+    "@types/node": "^22.16.1",
     "@types/react": "^18.0.33",
     "@types/react-dom": "^18.0.11",
     "@types/uuid": "^10.0.0",
