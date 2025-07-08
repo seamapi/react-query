@@ -1,7 +1,7 @@
 {
-  "name": "@seamapi/makenew-tsmodule",
-  "version": "1.6.3",
-  "description": "Package skeleton for a TypeScript module.",
+  "name": "@seamapi/react-query",
+  "version": "0.0.0",
+  "description": "React Query for the Seam API.",
   "type": "module",
   "main": "index.js",
   "types": "index.d.ts",
@@ -22,9 +22,9 @@
   "keywords": [
     "node"
   ],
-  "homepage": "https://github.com/seamapi/makenew-tsmodule",
-  "bugs": "https://github.com/seamapi/makenew-tsmodule/issues",
-  "repository": "seamapi/makenew-tsmodule",
+  "homepage": "https://github.com/seamapi/react-query",
+  "bugs": "https://github.com/seamapi/react-query/issues",
+  "repository": "seamapi/react-query",
   "license": "MIT",
   "author": {
     "name": "Seam Labs, Inc.",
