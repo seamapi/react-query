@@ -1,6 +1,5 @@
 {
   "root": true,
-  "plugins": ["simple-import-sort", "unused-imports"],
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": "latest"
@@ -19,8 +18,12 @@
       }
     ],
     "import/extensions": ["error", "ignorePackages"],
-    "import/no-duplicates": ["error", { "prefer-inline": true }],
-    "import/no-relative-parent-imports": "error",
+    "import/no-duplicates": [
+      "error",
+      {
+        "prefer-inline": true
+      }
+    ],
     "simple-import-sort/imports": [
       "error",
       {
@@ -28,14 +31,15 @@
           ["^\\u0000"],
           ["^node:"],
           ["^@?\\w"],
-          ["@seamapi/react-query"],
-          ["^lib/"],
+          ["^@seamapi/react-query/"],
+          ["^fixtures/", "^lib/"],
           ["^"],
           ["^\\."]
         ]
       }
     ],
-    "simple-import-sort/exports": "error"
+    "simple-import-sort/exports": "error",
+    "import/no-relative-parent-imports": "error"
   },
   "overrides": [
     {
@@ -44,7 +48,14 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "extends": ["standard-with-typescript", "prettier"],
+      "extends": [
+        "standard-with-typescript",
+        "standard-jsx",
+        "standard-react",
+        "plugin:react/jsx-runtime",
+        "prettier"
+      ],
+      "plugins": ["simple-import-sort", "unused-imports"],
       "parserOptions": {
         "project": "./tsconfig.json"
       },
@@ -56,7 +67,9 @@
             "fixStyle": "inline-type-imports"
           }
         ],
-        "@typescript-eslint/no-unused-vars": "off"
+        "@typescript-eslint/no-unused-vars": "off",
+        "react/function-component-definition": "error",
+        "react-hooks/exhaustive-deps": "error"
       }
     }
   ]

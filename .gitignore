@@ -10,10 +10,21 @@
 *.js
 *.js.map
 !src/**/*.d.ts
-!ava.config.js
+!examples/**/*.d.ts
+
+# Yalc
+.yalc
+yalc.lock
+
+# Vercel
+.vercel
+
+# Vite
+*.timestamp-*
 
 # Build directories
 package
+docs
 
 # Environment versions file
 .versions
