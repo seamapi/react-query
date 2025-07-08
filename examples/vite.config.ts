@@ -1,5 +1,6 @@
-import { setTimeout } from 'node:timers/promises'
 import { env } from 'node:process'
+import { setTimeout } from 'node:timers/promises'
+
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
@@ -27,10 +28,7 @@ export default defineConfig(async ({ command }) => {
   }
 })
 
-const setupEnv = async (
-  endpoint: string,
-  isBuild: boolean,
-): Promise<void> => {
+const setupEnv = async (endpoint: string, isBuild: boolean): Promise<void> => {
   env['SEAM_ENDPOINT'] ??= endpoint
 
   if (env['SEAM_PUBLISHABLE_KEY'] == null) {
@@ -40,7 +38,7 @@ const setupEnv = async (
         `> Using the default publishable key.
 > Use your own by setting SEAM_PUBLISHABLE_KEY in your environment.
 > Get one for free at https://console.seam.co/
-`
+`,
       )
       await setTimeout(2000)
     }
