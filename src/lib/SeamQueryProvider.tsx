@@ -2,7 +2,7 @@ import type {
   SeamHttp,
   SeamHttpEndpoints,
   SeamHttpOptionsWithClientSessionToken,
-} from '@seamapi/http/connect'
+} from '@seamapi/http'
 import {
   QueryClient,
   QueryClientContext,

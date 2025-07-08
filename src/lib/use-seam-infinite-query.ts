@@ -7,7 +7,7 @@ import type {
   SeamHttpInvalidInputError,
   SeamHttpRequest,
   SeamPageCursor,
-} from '@seamapi/http/connect'
+} from '@seamapi/http'
 import type { ActionAttempt } from '@seamapi/types/connect'
 import {
   type QueryKey,

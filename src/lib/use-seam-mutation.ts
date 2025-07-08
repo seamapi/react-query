@@ -5,7 +5,7 @@ import type {
   SeamHttpEndpointMutationPaths,
   SeamHttpEndpoints,
   SeamHttpInvalidInputError,
-} from '@seamapi/http/connect'
+} from '@seamapi/http'
 import type { ActionAttempt } from '@seamapi/types/connect'
 import {
   useMutation,

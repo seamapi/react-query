@@ -3,7 +3,7 @@ import type {
   SeamHttpEndpointsWithoutWorkspace,
   SeamHttpEndpointWithoutWorkspaceMutationPaths,
   SeamHttpInvalidInputError,
-} from '@seamapi/http/connect'
+} from '@seamapi/http'
 import {
   useMutation,
   type UseMutationOptions,

@@ -3,7 +3,7 @@ import type {
   SeamHttpEndpointsWithoutWorkspace,
   SeamHttpEndpointWithoutWorkspaceQueryPaths,
   SeamHttpInvalidInputError,
-} from '@seamapi/http/connect'
+} from '@seamapi/http'
 import {
   type QueryKey,
   useQuery,

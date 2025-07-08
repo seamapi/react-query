@@ -3,7 +3,7 @@ import {
   SeamHttpEndpoints,
   SeamHttpEndpointsWithoutWorkspace,
   SeamHttpWithoutWorkspace,
-} from '@seamapi/http/connect'
+} from '@seamapi/http'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
