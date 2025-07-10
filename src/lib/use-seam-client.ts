@@ -55,7 +55,10 @@ export function useSeamClient(): {
       if (client != null)
         return {
           client,
-          endpointClient: SeamHttpEndpoints.fromClient(client.client),
+          endpointClient: SeamHttpEndpoints.fromClient(
+            client.client,
+            clientOptions,
+          ),
           clientWithoutWorkspace: null,
           endpointClientWithoutWorkspace: null,
         }
@@ -68,7 +71,10 @@ export function useSeamClient(): {
 
         return {
           client: seam,
-          endpointClient: SeamHttpEndpoints.fromClient(seam.client),
+          endpointClient: SeamHttpEndpoints.fromClient(
+            seam.client,
+            clientOptions,
+          ),
           clientWithoutWorkspace: null,
           endpointClientWithoutWorkspace: null,
         }
@@ -83,7 +89,10 @@ export function useSeamClient(): {
 
         return {
           client: seam,
-          endpointClient: SeamHttpEndpoints.fromClient(seam.client),
+          endpointClient: SeamHttpEndpoints.fromClient(
+            seam.client,
+            clientOptions,
+          ),
           clientWithoutWorkspace: null,
           endpointClientWithoutWorkspace: null,
         }
@@ -91,11 +100,15 @@ export function useSeamClient(): {
 
       if (consoleSessionToken != null) {
         const clientWithoutWorkspace =
-          SeamHttpWithoutWorkspace.fromConsoleSessionToken(consoleSessionToken)
+          SeamHttpWithoutWorkspace.fromConsoleSessionToken(
+            consoleSessionToken,
+            clientOptions,
+          )
 
         const endpointClientWithoutWorkspace =
           SeamHttpEndpointsWithoutWorkspace.fromClient(
             clientWithoutWorkspace.client,
+            clientOptions,
           )
 
         if (workspaceId == null) {
@@ -115,7 +128,10 @@ export function useSeamClient(): {
 
         return {
           client: seam,
-          endpointClient: SeamHttpEndpoints.fromClient(seam.client),
+          endpointClient: SeamHttpEndpoints.fromClient(
+            seam.client,
+            clientOptions,
+          ),
           clientWithoutWorkspace,
           endpointClientWithoutWorkspace,
         }
