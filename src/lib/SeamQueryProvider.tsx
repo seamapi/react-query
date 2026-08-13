@@ -18,6 +18,9 @@ import {
 import { seamContext, type SeamQueryContext } from './seam-query-context.js'
 import { useSeamClient } from './use-seam-client.js'
 
+export type { SeamQueryContext } from './seam-query-context.js'
+export { seamContext, useSeamQueryContext } from './seam-query-context.js'
+
 export type SeamQueryProviderProps =
   | SeamQueryProviderPropsWithClient
   | SeamQueryProviderPropsWithPublishableKey
