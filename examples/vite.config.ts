@@ -3,7 +3,6 @@ import { setTimeout } from 'node:timers/promises'
 
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
-import tsconfigPaths from 'vite-tsconfig-paths'
 
 const target = 'https://connect.getseam.com'
 
@@ -14,7 +13,14 @@ export default defineConfig(async ({ command }) => {
   return {
     base: '/examples',
     envPrefix: 'SEAM_',
-    plugins: [tsconfigPaths(), react()],
+    plugins: [react()],
+    resolve: {
+      alias: {
+        '@seamapi/react-query': new URL('../src/index.ts', import.meta.url).pathname,
+        lib: new URL('../src/lib', import.meta.url).pathname,
+        test: new URL('../test', import.meta.url).pathname,
+      },
+    },
     server: {
       port: 8080,
       proxy: {
