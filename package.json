@@ -1,6 +1,6 @@
 {
   "name": "@seamapi/react-query",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "React Query for the Seam API.",
   "type": "module",
   "main": "index.js",
