@@ -55,10 +55,7 @@ export function useSeamClient(): {
       if (client != null)
         return {
           client,
-          endpointClient: SeamHttpEndpoints.fromClient(
-            client.client,
-            clientOptions,
-          ),
+          endpointClient: SeamHttpEndpoints.fromClient(client.client),
           clientWithoutWorkspace: null,
           endpointClientWithoutWorkspace: null,
         }
@@ -71,10 +68,7 @@ export function useSeamClient(): {
 
         return {
           client: seam,
-          endpointClient: SeamHttpEndpoints.fromClient(
-            seam.client,
-            clientOptions,
-          ),
+          endpointClient: SeamHttpEndpoints.fromClient(seam.client),
           clientWithoutWorkspace: null,
           endpointClientWithoutWorkspace: null,
         }
@@ -89,10 +83,7 @@ export function useSeamClient(): {
 
         return {
           client: seam,
-          endpointClient: SeamHttpEndpoints.fromClient(
-            seam.client,
-            clientOptions,
-          ),
+          endpointClient: SeamHttpEndpoints.fromClient(seam.client),
           clientWithoutWorkspace: null,
           endpointClientWithoutWorkspace: null,
         }
@@ -108,7 +99,6 @@ export function useSeamClient(): {
         const endpointClientWithoutWorkspace =
           SeamHttpEndpointsWithoutWorkspace.fromClient(
             clientWithoutWorkspace.client,
-            clientOptions,
           )
 
         if (workspaceId == null) {
@@ -128,10 +118,7 @@ export function useSeamClient(): {
 
         return {
           client: seam,
-          endpointClient: SeamHttpEndpoints.fromClient(
-            seam.client,
-            clientOptions,
-          ),
+          endpointClient: SeamHttpEndpoints.fromClient(seam.client),
           clientWithoutWorkspace,
           endpointClientWithoutWorkspace,
         }

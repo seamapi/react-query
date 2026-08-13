@@ -1,4 +1,5 @@
 import type {
+  ActionAttempt,
   SeamActionAttemptFailedError,
   SeamActionAttemptTimeoutError,
   SeamHttpApiError,
@@ -6,7 +7,6 @@ import type {
   SeamHttpEndpoints,
   SeamHttpInvalidInputError,
 } from '@seamapi/http'
-import type { ActionAttempt } from '@seamapi/types/connect'
 import {
   type QueryKey,
   useQuery,
