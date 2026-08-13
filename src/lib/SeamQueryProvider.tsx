@@ -37,28 +37,24 @@ export type SeamQueryProviderProps =
   | SeamQueryProviderPropsWithClientSessionToken
   | SeamQueryProviderPropsWithConsoleSessionToken
 
-export interface SeamQueryProviderPropsWithClient
-  extends SeamQueryProviderBaseProps {
+export interface SeamQueryProviderPropsWithClient extends SeamQueryProviderBaseProps {
   client: SeamHttp
   queryKeyPrefix: string
 }
 
 export interface SeamQueryProviderPropsWithPublishableKey
-  extends SeamQueryProviderBaseProps,
-    SeamQueryProviderClientOptions {
+  extends SeamQueryProviderBaseProps, SeamQueryProviderClientOptions {
   publishableKey: string
   userIdentifierKey?: string
 }
 
 export interface SeamQueryProviderPropsWithClientSessionToken
-  extends SeamQueryProviderBaseProps,
-    SeamQueryProviderClientOptions {
+  extends SeamQueryProviderBaseProps, SeamQueryProviderClientOptions {
   clientSessionToken: string
 }
 
 export interface SeamQueryProviderPropsWithConsoleSessionToken
-  extends SeamQueryProviderBaseProps,
-    SeamQueryProviderClientOptions {
+  extends SeamQueryProviderBaseProps, SeamQueryProviderClientOptions {
   consoleSessionToken: string
   workspaceId?: string | undefined
 }

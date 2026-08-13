@@ -52,13 +52,14 @@ export function useSeamClient(): {
       },
     ],
     queryFn: async () => {
-      if (client != null)
+      if (client != null) {
         return {
           client,
           endpointClient: SeamHttpEndpoints.fromClient(client.client),
           clientWithoutWorkspace: null,
           endpointClientWithoutWorkspace: null,
         }
+      }
 
       if (clientSessionToken != null) {
         const seam = SeamHttp.fromClientSessionToken(
