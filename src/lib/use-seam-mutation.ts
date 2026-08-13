@@ -56,9 +56,8 @@ type MutationError<T extends SeamHttpEndpointMutationPaths> =
   | SeamHttpApiError
   | SeamHttpInvalidInputError
   | (MutationData<T> extends ActionAttempt
-      ?
-          | SeamActionAttemptFailedError<MutationData<T>>
-          | SeamActionAttemptTimeoutError<MutationData<T>>
+      ? | SeamActionAttemptFailedError<MutationData<T>>
+        | SeamActionAttemptTimeoutError<MutationData<T>>
       : never)
 
 type MutationOptions<X, Y, Z> = Omit<UseMutationOptions<X, Y, Z>, 'mutationFn'>

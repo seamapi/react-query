@@ -53,7 +53,7 @@ export function useSeamClient(): {
     ],
     queryFn: async () => {
       if (client != null)
-        return {
+        {return {
           client,
           endpointClient: SeamHttpEndpoints.fromClient(
             client.client,
@@ -61,7 +61,7 @@ export function useSeamClient(): {
           ),
           clientWithoutWorkspace: null,
           endpointClientWithoutWorkspace: null,
-        }
+        }}
 
       if (clientSessionToken != null) {
         const seam = SeamHttp.fromClientSessionToken(

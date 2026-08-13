@@ -58,9 +58,8 @@ type QueryError<T extends SeamHttpEndpointQueryPaths> =
   | SeamHttpApiError
   | SeamHttpInvalidInputError
   | (QueryData<T> extends ActionAttempt
-      ?
-          | SeamActionAttemptFailedError<QueryData<T>>
-          | SeamActionAttemptTimeoutError<QueryData<T>>
+      ? | SeamActionAttemptFailedError<QueryData<T>>
+        | SeamActionAttemptTimeoutError<QueryData<T>>
       : never)
 
 type QueryOptions<X, Y> = Omit<UseQueryOptions<X, Y>, 'queryKey' | 'queryFn'>
