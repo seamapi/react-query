@@ -52,11 +52,12 @@ export function useSeamInfiniteQuery<
     initialPageParam: null,
     getNextPageParam: (lastPage) => lastPage.nextPageCursor,
     queryFn: async ({ pageParam }) => {
-      if (client == null)
-        {return {
+      if (client == null) {
+        return {
           data: [] as Awaited<ReturnType<SeamHttpEndpoints[T]>>,
           nextPageCursor: null,
-        }}
+        }
+      }
       // Using @ts-expect-error over any is preferred, but not possible here because TypeScript will run out of memory.
       // Type assertion is needed here for performance reasons. The types are correct at runtime.
       const endpoint = client[endpointPath] as (...args: any) => any
