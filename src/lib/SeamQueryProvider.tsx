@@ -1,6 +1,5 @@
 import type {
   SeamHttp,
-  SeamHttpEndpoints,
   SeamHttpOptionsWithClientSessionToken,
 } from '@seamapi/http'
 import {
@@ -9,7 +8,6 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 import {
-  createContext,
   type JSX,
   type PropsWithChildren,
   useContext,
@@ -17,19 +15,8 @@ import {
   useMemo,
 } from 'react'
 
+import { seamContext, type SeamQueryContext } from './seam-query-context.js'
 import { useSeamClient } from './use-seam-client.js'
-
-export interface SeamQueryContext {
-  client: SeamHttp | null
-  endpointClient: SeamHttpEndpoints | null
-  clientOptions?: SeamQueryProviderClientOptions | undefined
-  publishableKey?: string | undefined
-  userIdentifierKey?: string | undefined
-  clientSessionToken?: string | undefined
-  consoleSessionToken?: string | undefined
-  workspaceId?: string | undefined
-  queryKeyPrefix?: string | undefined
-}
 
 export type SeamQueryProviderProps =
   | SeamQueryProviderPropsWithClient
@@ -192,14 +179,6 @@ const createSeamQueryContextValue = (
 }
 
 const defaultSeamQueryContextValue = createDefaultSeamQueryContextValue()
-
-export const seamContext = createContext<SeamQueryContext>(
-  defaultSeamQueryContextValue,
-)
-
-export function useSeamQueryContext(): SeamQueryContext {
-  return useContext(seamContext)
-}
 
 const isSeamQueryProviderPropsWithClient = (
   props: SeamQueryProviderProps,

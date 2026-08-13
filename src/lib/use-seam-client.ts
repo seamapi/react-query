@@ -8,7 +8,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
-import { useSeamQueryContext } from './SeamQueryProvider.js'
+import { useSeamQueryContext } from './seam-query-context.js'
 
 export function useSeamClient(): {
   client: SeamHttp | null
