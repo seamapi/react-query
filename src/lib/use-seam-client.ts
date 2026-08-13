@@ -30,6 +30,10 @@ export function useSeamClient(): {
     queryKeyPrefix,
     ...context
   } = useSeamQueryContext()
+  const seamClientOptions =
+    clientOptions?.endpoint == null
+      ? undefined
+      : { endpoint: clientOptions.endpoint }
   const userIdentifierKey = useUserIdentifierKeyOrFingerprint(
     clientSessionToken != null ? '' : context.userIdentifierKey,
   )
@@ -64,7 +68,7 @@ export function useSeamClient(): {
       if (clientSessionToken != null) {
         const seam = SeamHttp.fromClientSessionToken(
           clientSessionToken,
-          clientOptions,
+          seamClientOptions,
         )
 
         return {
@@ -79,7 +83,7 @@ export function useSeamClient(): {
         const seam = await SeamHttp.fromPublishableKey(
           publishableKey,
           userIdentifierKey,
-          clientOptions,
+          seamClientOptions,
         )
 
         return {
@@ -94,7 +98,7 @@ export function useSeamClient(): {
         const clientWithoutWorkspace =
           SeamHttpWithoutWorkspace.fromConsoleSessionToken(
             consoleSessionToken,
-            clientOptions,
+            seamClientOptions,
           )
 
         const endpointClientWithoutWorkspace =
@@ -114,7 +118,7 @@ export function useSeamClient(): {
         const seam = SeamHttp.fromConsoleSessionToken(
           consoleSessionToken,
           workspaceId,
-          clientOptions,
+          seamClientOptions,
         )
 
         return {
