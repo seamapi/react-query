@@ -40,18 +40,18 @@ all other preferred methods use `body`.
 
 ### Compile-time versus runtime
 
-| Field | Type artifact | Browser runtime | Reason |
-| --- | --- | --- | --- |
-| Path | Yes | Yes | Hook constraint, query key, and request pathname |
-| Parameter type | Yes | No | Call-site checking only |
-| Result type | Yes | No | Hook result inference only |
-| Semantic kind | Yes | Yes | Select hook path unions and inspect the artifact |
-| Workspace scope | Yes | Yes | Select without-workspace hook unions and inspect the artifact |
-| Action-attempt boolean/type | Yes | Yes | Error/options types and request execution |
-| HTTP method and placement | No | Yes | Request execution |
-| Response key | No | Yes | `SeamHttpRequest` unwrapping |
-| Pagination metadata | No | Yes | Infinite-query eligibility and future paginator work |
-| Required parameter metadata | Reflected in the parameter type | Yes | Type errors and `SeamHttpRequest` runtime validation |
+| Field                       | Type artifact                   | Browser runtime | Reason                                                        |
+| --------------------------- | ------------------------------- | --------------- | ------------------------------------------------------------- |
+| Path                        | Yes                             | Yes             | Hook constraint, query key, and request pathname              |
+| Parameter type              | Yes                             | No              | Call-site checking only                                       |
+| Result type                 | Yes                             | No              | Hook result inference only                                    |
+| Semantic kind               | Yes                             | Yes             | Select hook path unions and inspect the artifact              |
+| Workspace scope             | Yes                             | Yes             | Select without-workspace hook unions and inspect the artifact |
+| Action-attempt boolean/type | Yes                             | Yes             | Error/options types and request execution                     |
+| HTTP method and placement   | No                              | Yes             | Request execution                                             |
+| Response key                | No                              | Yes             | `SeamHttpRequest` unwrapping                                  |
+| Pagination metadata         | No                              | Yes             | Infinite-query eligibility and future paginator work          |
+| Required parameter metadata | Reflected in the parameter type | Yes             | Type errors and `SeamHttpRequest` runtime validation          |
 
 The generated artifact contains no Blueprint, OpenAPI, YAML, or code-generator
 imports. It has one type-only import of the small local ABI declaration.
