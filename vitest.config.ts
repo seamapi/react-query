@@ -15,7 +15,7 @@ export default defineConfig({
       reporter: ['html', 'lcov', 'text'],
     },
     environment: 'happy-dom',
-    exclude: ['cli/**', 'node_modules/**'],
+    exclude: ['node_modules/**'],
     include: ['src/**/*.test.ts', 'src/**/*.test.tsx', 'test/**/*.test.tsx'],
   },
 })
