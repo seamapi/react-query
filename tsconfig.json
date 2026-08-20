@@ -27,6 +27,7 @@
     "types": ["node"],
     "paths": {
       "@seamapi/react-query": ["./src/index.ts"],
+      "experimental/*": ["./experimental/*"],
       "lib/*": ["./src/lib/*"]
     }
   },
@@ -35,6 +36,7 @@
     "src/**/*",
     "test/**/*",
     "examples/**/*",
+    "experimental/**/*",
     "eslint.config.ts",
     "vitest.config.ts"
   ]

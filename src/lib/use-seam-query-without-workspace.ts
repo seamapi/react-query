@@ -1,8 +1,7 @@
 import type {
   SeamHttpApiError,
-  SeamHttpEndpointsWithoutWorkspace,
-  SeamHttpEndpointWithoutWorkspaceQueryPaths,
   SeamHttpInvalidInputError,
+  SeamHttpRequestOptions,
 } from '@seamapi/http'
 import {
   type QueryKey,
@@ -11,28 +10,40 @@ import {
   type UseQueryResult,
 } from '@tanstack/react-query'
 
-import { useSeamClient } from 'lib/use-seam-client.js'
+import {
+  createManifestRequest,
+  type EndpointParameters,
+  type EndpointPathWithoutWorkspaceByKind,
+  type EndpointRequestOptions,
+  type EndpointResult,
+} from './endpoint-manifest.js'
+import {
+  type GeneratedEndpointTypes,
+  seamEndpointManifest,
+} from './generated/connect-endpoint-manifest.js'
+import { useSeamClient } from './use-seam-client.js'
 
-export type UseSeamQueryWithoutWorkspaceParameters<
-  T extends SeamHttpEndpointWithoutWorkspaceQueryPaths,
-> = Parameters<SeamHttpEndpointsWithoutWorkspace[T]>[0]
+type QueryPath = EndpointPathWithoutWorkspaceByKind<
+  GeneratedEndpointTypes,
+  'query'
+>
 
-export type UseSeamQueryWithoutWorkspaceResult<
-  T extends SeamHttpEndpointWithoutWorkspaceQueryPaths,
-> = UseQueryResult<QueryData<T>, QueryError>
+export type UseSeamQueryWithoutWorkspaceParameters<T extends QueryPath> =
+  EndpointParameters<GeneratedEndpointTypes, T>
 
-export function useSeamQueryWithoutWorkspace<
-  T extends SeamHttpEndpointWithoutWorkspaceQueryPaths,
->(
+export type UseSeamQueryWithoutWorkspaceResult<T extends QueryPath> =
+  UseQueryResult<QueryData<T>, QueryError>
+
+export function useSeamQueryWithoutWorkspace<T extends QueryPath>(
   endpointPath: T,
-  parameters: UseSeamQueryWithoutWorkspaceParameters<T> = {},
-  options: Parameters<SeamHttpEndpointsWithoutWorkspace[T]>[1] &
+  parameters: UseSeamQueryWithoutWorkspaceParameters<T> = {} as UseSeamQueryWithoutWorkspaceParameters<T>,
+  options: EndpointRequestOptions<GeneratedEndpointTypes, T> &
     QueryOptions<QueryData<T>, QueryError> = {},
 ): UseSeamQueryWithoutWorkspaceResult<T> & { queryKey: QueryKey } {
-  const { endpointClient: client, queryKeyPrefixes } = useSeamClient()
+  const { clientWithoutWorkspace: client, queryKeyPrefixes } = useSeamClient()
   const queryKey = [
     ...queryKeyPrefixes,
-    ...endpointPath.split('/').filter((v) => v !== ''),
+    ...endpointPath.split('/').filter((value) => value !== ''),
     parameters ?? {},
   ]
   const result = useQuery({
@@ -40,20 +51,20 @@ export function useSeamQueryWithoutWorkspace<
     ...options,
     queryKey,
     queryFn: async () => {
-      if (client == null) return null
-      // Using @ts-expect-error over any is preferred, but not possible here because TypeScript will run out of memory.
-      // Type assertion is needed here for performance reasons. The types are correct at runtime.
-      const endpoint = client[endpointPath] as (...args: any) => Promise<any>
-      return await endpoint(parameters, options)
+      if (client == null) {
+        throw new Error('Attempted to execute a disabled query')
+      }
+      return (await createManifestRequest(
+        client,
+        seamEndpointManifest[endpointPath],
+        parameters,
+        options as Pick<SeamHttpRequestOptions, 'waitForActionAttempt'>,
+      )) as QueryData<T>
     },
   })
   return { ...result, queryKey }
 }
 
-type QueryData<T extends SeamHttpEndpointWithoutWorkspaceQueryPaths> = Awaited<
-  ReturnType<SeamHttpEndpointsWithoutWorkspace[T]>
->
-
+type QueryData<T extends QueryPath> = EndpointResult<GeneratedEndpointTypes, T>
 type QueryError = Error | SeamHttpApiError | SeamHttpInvalidInputError
-
 type QueryOptions<X, Y> = Omit<UseQueryOptions<X, Y>, 'queryKey' | 'queryFn'>

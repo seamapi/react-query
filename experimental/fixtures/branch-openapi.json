@@ -1,0 +1,246 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "React Query branch fixture",
+    "version": "0.0.0"
+  },
+  "components": {
+    "securitySchemes": {
+      "api_key": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization"
+      }
+    },
+    "schemas": {
+      "branch_widget": {
+        "type": "object",
+        "description": "A branch-only widget.",
+        "x-route-path": "/experimental/widgets",
+        "required": ["branch_widget_id", "label", "revision"],
+        "properties": {
+          "branch_widget_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "label": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/experimental/widgets/get_branch_widget": {
+      "get": {
+        "operationId": "experimentalWidgetsGetBranchWidgetGet",
+        "summary": "/experimental/widgets/get_branch_widget",
+        "description": "Returns an endpoint that only exists on the experiment branch.",
+        "tags": ["/experimental/widgets"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "x-title": "Get a Branch Widget",
+        "x-fern-sdk-group-name": ["experimental", "widgets"],
+        "x-fern-sdk-method-name": "get_branch_widget",
+        "x-fern-sdk-return-value": "branch_widget",
+        "x-response-key": "branch_widget",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "branch_widget_id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["ok", "branch_widget"],
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "branch_widget": {
+                      "$ref": "#/components/schemas/branch_widget"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "experimentalWidgetsGetBranchWidgetPost",
+        "summary": "/experimental/widgets/get_branch_widget",
+        "description": "Returns an endpoint that only exists on the experiment branch.",
+        "tags": ["/experimental/widgets"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "x-title": "Get a Branch Widget",
+        "x-fern-sdk-group-name": ["experimental", "widgets"],
+        "x-fern-sdk-method-name": "get_branch_widget",
+        "x-fern-sdk-return-value": "branch_widget",
+        "x-response-key": "branch_widget",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["ok", "branch_widget"],
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "branch_widget": {
+                      "$ref": "#/components/schemas/branch_widget"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["branch_widget_id"],
+                "properties": {
+                  "branch_widget_id": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/experimental/widgets/internal_probe": {
+      "get": {
+        "operationId": "experimentalWidgetsInternalProbeGet",
+        "summary": "/experimental/widgets/internal_probe",
+        "description": "Returns an endpoint that only exists on the experiment branch.",
+        "tags": ["/experimental/widgets"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "x-title": "Internal Widget Probe",
+        "x-fern-sdk-group-name": ["experimental", "widgets"],
+        "x-fern-sdk-method-name": "internal_probe",
+        "x-fern-sdk-return-value": "branch_widget",
+        "x-response-key": "branch_widget",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "branch_widget_id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["ok", "branch_widget"],
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "branch_widget": {
+                      "$ref": "#/components/schemas/branch_widget"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-undocumented": "Synthetic contract fixture."
+      },
+      "post": {
+        "operationId": "experimentalWidgetsInternalProbePost",
+        "summary": "/experimental/widgets/internal_probe",
+        "description": "Returns an endpoint that only exists on the experiment branch.",
+        "tags": ["/experimental/widgets"],
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "x-title": "Internal Widget Probe",
+        "x-fern-sdk-group-name": ["experimental", "widgets"],
+        "x-fern-sdk-method-name": "internal_probe",
+        "x-fern-sdk-return-value": "branch_widget",
+        "x-response-key": "branch_widget",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["ok", "branch_widget"],
+                  "properties": {
+                    "ok": {
+                      "type": "boolean"
+                    },
+                    "branch_widget": {
+                      "$ref": "#/components/schemas/branch_widget"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["branch_widget_id"],
+                "properties": {
+                  "branch_widget_id": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-undocumented": "Synthetic contract fixture."
+      }
+    }
+  }
+}

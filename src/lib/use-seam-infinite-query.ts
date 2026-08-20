@@ -3,38 +3,55 @@ import type {
   SeamActionAttemptFailedError,
   SeamActionAttemptTimeoutError,
   SeamHttpApiError,
-  SeamHttpEndpointPaginatedQueryPaths,
-  SeamHttpEndpoints,
   SeamHttpInvalidInputError,
   SeamHttpRequest,
+  SeamHttpRequestOptions,
   SeamPageCursor,
 } from '@seamapi/http'
 import {
+  type InfiniteData,
   type QueryKey,
   useInfiniteQuery,
   type UseInfiniteQueryOptions,
   type UseInfiniteQueryResult,
 } from '@tanstack/react-query'
 
-import { useSeamClient } from 'lib/use-seam-client.js'
+import {
+  createManifestRequest,
+  type EndpointParameters,
+  type EndpointRequestOptions,
+  type EndpointResult,
+} from './endpoint-manifest.js'
+import {
+  type GeneratedEndpointTypes,
+  seamEndpointManifest,
+} from './generated/connect-endpoint-manifest.js'
+import { useSeamClient } from './use-seam-client.js'
 
-export type UseSeamInfiniteQueryParameters<
-  T extends SeamHttpEndpointPaginatedQueryPaths,
-> = Parameters<SeamHttpEndpoints[T]>[0]
+type PaginatedQueryPath = {
+  [P in keyof GeneratedEndpointTypes]: GeneratedEndpointTypes[P] extends {
+    kind: 'query'
+  }
+    ? (typeof seamEndpointManifest)[P] extends { pagination: object }
+      ? P
+      : never
+    : never
+}[keyof GeneratedEndpointTypes] &
+  string
 
-export type UseSeamInfiniteQueryResult<
-  T extends SeamHttpEndpointPaginatedQueryPaths,
-> = UseInfiniteQueryResult<QueryData<T>, QueryError<T>>
+export type UseSeamInfiniteQueryParameters<T extends PaginatedQueryPath> =
+  EndpointParameters<GeneratedEndpointTypes, T>
 
-export function useSeamInfiniteQuery<
-  T extends SeamHttpEndpointPaginatedQueryPaths,
->(
+export type UseSeamInfiniteQueryResult<T extends PaginatedQueryPath> =
+  UseInfiniteQueryResult<InfiniteData<QueryData<T>>, QueryError<T>>
+
+export function useSeamInfiniteQuery<T extends PaginatedQueryPath>(
   endpointPath: T,
-  parameters: UseSeamInfiniteQueryParameters<T> = {},
-  options: Parameters<SeamHttpEndpoints[T]>[1] &
+  parameters: UseSeamInfiniteQueryParameters<T> = {} as UseSeamInfiniteQueryParameters<T>,
+  options: EndpointRequestOptions<GeneratedEndpointTypes, T> &
     QueryOptions<QueryData<T>, QueryError<T>> = {},
 ): UseSeamInfiniteQueryResult<T> & { queryKey: QueryKey } {
-  const { endpointClient: client, queryKeyPrefixes } = useSeamClient()
+  const { client, queryKeyPrefixes } = useSeamClient()
 
   if ('page_cursor' in (parameters ?? {})) {
     throw new Error('Cannot use page_cursor with useSeamInfiniteQuery')
@@ -42,10 +59,16 @@ export function useSeamInfiniteQuery<
 
   const queryKey = [
     ...queryKeyPrefixes,
-    ...endpointPath.split('/').filter((v) => v !== ''),
+    ...endpointPath.split('/').filter((value) => value !== ''),
     parameters ?? {},
   ]
-  const result = useInfiniteQuery({
+  const result = useInfiniteQuery<
+    QueryData<T>,
+    QueryError<T>,
+    InfiniteData<QueryData<T>>,
+    QueryKey,
+    SeamPageCursor | null
+  >({
     enabled: client != null,
     ...options,
     queryKey,
@@ -54,50 +77,62 @@ export function useSeamInfiniteQuery<
     queryFn: async ({ pageParam }) => {
       if (client == null) {
         return {
-          data: [] as Awaited<ReturnType<SeamHttpEndpoints[T]>>,
+          data: [] as QueryResult<T>,
           nextPageCursor: null,
         }
       }
-      // Using @ts-expect-error over any is preferred, but not possible here because TypeScript will run out of memory.
-      // Type assertion is needed here for performance reasons. The types are correct at runtime.
-      const endpoint = client[endpointPath] as (...args: any) => any
-      const request = endpoint(parameters, options)
-      const pages = client.createPaginator(request as SeamHttpRequest<any, any>)
-      if (pageParam == null) {
-        const [data, { nextPageCursor }] = await pages.firstPage()
-        return {
-          data: data as Awaited<ReturnType<SeamHttpEndpoints[T]>>,
-          nextPageCursor,
-        }
-      }
-      // Type assertion is needed for pageParam since the Seam API expects a branded PageCursor type.
-      const [data, { nextPageCursor }] = await pages.nextPage(
-        pageParam as SeamPageCursor,
+      const request = createManifestRequest(
+        client,
+        seamEndpointManifest[endpointPath],
+        parameters,
+        options as Pick<SeamHttpRequestOptions, 'waitForActionAttempt'>,
       )
-      return {
-        data: data as Awaited<ReturnType<SeamHttpEndpoints[T]>>,
-        nextPageCursor,
-      }
+      const pages = client.createPaginator(
+        request as SeamHttpRequest<Record<string, unknown>, string>,
+      ) as unknown as ManifestPaginator<QueryResult<T>>
+      const [data, { nextPageCursor }] =
+        pageParam == null
+          ? await pages.firstPage()
+          : await pages.nextPage(pageParam as SeamPageCursor)
+      return { data, nextPageCursor }
     },
   })
   return { ...result, queryKey }
 }
 
-interface QueryData<T extends SeamHttpEndpointPaginatedQueryPaths> {
-  data: Awaited<ReturnType<SeamHttpEndpoints[T]>>
+interface ManifestPaginator<T> {
+  firstPage(): Promise<[T, { nextPageCursor: SeamPageCursor | null }]>
+  nextPage(
+    cursor: SeamPageCursor,
+  ): Promise<[T, { nextPageCursor: SeamPageCursor | null }]>
+}
+
+interface QueryData<T extends PaginatedQueryPath> {
+  data: QueryResult<T>
   nextPageCursor: SeamPageCursor | null
 }
 
-type QueryError<T extends SeamHttpEndpointPaginatedQueryPaths> =
+type QueryResult<T extends PaginatedQueryPath> = EndpointResult<
+  GeneratedEndpointTypes,
+  T
+>
+
+type QueryError<T extends PaginatedQueryPath> =
   | Error
   | SeamHttpApiError
   | SeamHttpInvalidInputError
-  | (QueryData<T>['data'] extends ActionAttempt
-      ? | SeamActionAttemptFailedError<QueryData<T>['data']>
-        | SeamActionAttemptTimeoutError<QueryData<T>['data']>
+  | (QueryResult<T> extends ActionAttempt
+      ? | SeamActionAttemptFailedError<QueryResult<T>>
+        | SeamActionAttemptTimeoutError<QueryResult<T>>
       : never)
 
 type QueryOptions<X, Y> = Omit<
-  UseInfiniteQueryOptions<X, Y>,
+  UseInfiniteQueryOptions<
+    X,
+    Y,
+    InfiniteData<X>,
+    QueryKey,
+    SeamPageCursor | null
+  >,
   'queryKey' | 'queryFn' | 'initialPageParam' | 'getNextPageParam'
 >

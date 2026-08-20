@@ -1,8 +1,7 @@
 import type {
   SeamHttpApiError,
-  SeamHttpEndpointsWithoutWorkspace,
-  SeamHttpEndpointWithoutWorkspaceMutationPaths,
   SeamHttpInvalidInputError,
+  SeamHttpRequestOptions,
 } from '@seamapi/http'
 import {
   useMutation,
@@ -10,47 +9,61 @@ import {
   type UseMutationResult,
 } from '@tanstack/react-query'
 
-import { NullSeamClientError, useSeamClient } from 'lib/use-seam-client.js'
+import {
+  createManifestRequest,
+  type EndpointParameters,
+  type EndpointPathWithoutWorkspaceByKind,
+  type EndpointRequestOptions,
+  type EndpointResult,
+} from './endpoint-manifest.js'
+import {
+  type GeneratedEndpointTypes,
+  seamEndpointManifest,
+} from './generated/connect-endpoint-manifest.js'
+import { NullSeamClientError, useSeamClient } from './use-seam-client.js'
 
-export type UseSeamMutationWithoutWorkspaceVariables<
-  T extends SeamHttpEndpointWithoutWorkspaceMutationPaths,
-> = Parameters<SeamHttpEndpointsWithoutWorkspace[T]>[0]
-
-export type UseSeamMutationWithoutWorkspaceResult<
-  T extends SeamHttpEndpointWithoutWorkspaceMutationPaths,
-> = UseMutationResult<
-  MutationData<T>,
-  MutationError,
-  UseSeamMutationWithoutWorkspaceVariables<T>
+type MutationPath = EndpointPathWithoutWorkspaceByKind<
+  GeneratedEndpointTypes,
+  'mutation'
 >
 
-export function useSeamMutationWithoutWorkspace<
-  T extends SeamHttpEndpointWithoutWorkspaceMutationPaths,
->(
+export type UseSeamMutationWithoutWorkspaceVariables<T extends MutationPath> =
+  EndpointParameters<GeneratedEndpointTypes, T>
+
+export type UseSeamMutationWithoutWorkspaceResult<T extends MutationPath> =
+  UseMutationResult<
+    MutationData<T>,
+    MutationError,
+    UseSeamMutationWithoutWorkspaceVariables<T>
+  >
+
+export function useSeamMutationWithoutWorkspace<T extends MutationPath>(
   endpointPath: T,
-  options: Parameters<SeamHttpEndpointsWithoutWorkspace[T]>[1] &
+  options: EndpointRequestOptions<GeneratedEndpointTypes, T> &
     MutationOptions<
       MutationData<T>,
       MutationError,
       UseSeamMutationWithoutWorkspaceVariables<T>
     > = {},
 ): UseSeamMutationWithoutWorkspaceResult<T> {
-  const { endpointClient: client } = useSeamClient()
+  const { clientWithoutWorkspace: client } = useSeamClient()
   return useMutation({
     ...options,
     mutationFn: async (variables) => {
       if (client === null) throw new NullSeamClientError()
-      // Using @ts-expect-error over any is preferred, but not possible here because TypeScript will run out of memory.
-      // Type assertion is needed here for performance reasons. The types are correct at runtime.
-      const endpoint = client[endpointPath] as (...args: any) => Promise<any>
-      return await endpoint(variables, options)
+      return (await createManifestRequest(
+        client,
+        seamEndpointManifest[endpointPath],
+        variables,
+        options as Pick<SeamHttpRequestOptions, 'waitForActionAttempt'>,
+      )) as MutationData<T>
     },
   })
 }
 
-type MutationData<T extends SeamHttpEndpointWithoutWorkspaceMutationPaths> =
-  Awaited<ReturnType<SeamHttpEndpointsWithoutWorkspace[T]>>
-
+type MutationData<T extends MutationPath> = EndpointResult<
+  GeneratedEndpointTypes,
+  T
+>
 type MutationError = Error | SeamHttpApiError | SeamHttpInvalidInputError
-
 type MutationOptions<X, Y, Z> = Omit<UseMutationOptions<X, Y, Z>, 'mutationFn'>
