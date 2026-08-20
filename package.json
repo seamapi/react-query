@@ -42,6 +42,7 @@
     "build:entrypoints": "tsc --project tsconfig.build.json",
     "postbuild:entrypoints": "tsc-alias --project tsconfig.build.json",
     "docs:build": "typedoc",
+    "postdocs:build": "npm run examples:build -- --outDir ../docs/examples",
     "typecheck": "tsc",
     "test": "vitest run --coverage",
     "test:update": "vitest run --update",
